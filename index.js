@@ -2,8 +2,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const { type } = require('node:os');
-//npm start for package
+
 
 //Connections:
 const connection = mysql.createConnection({
@@ -30,15 +29,19 @@ const connection = mysql.createConnection({
       })
       .then((answer) => {
         // based on their answer, either call the add or the view functions
-        if (answer.viewOrAdd === 'ADD') {
-          addEmp();
-        } else if (answer.postOrBid === 'VIEW') {
-          viewEmp();
-        } else {
-          connection.end();
+        switch (answer.viewOrAdd){
+         case "ADD":
+            addEmp();
+            break 
+         case "VIEW": 
+            console.log('viewing...')   
+            viewEmp();
+            break
+        case "EXIT": 
+            connecttion.end();    
+            break
         }
-      });
-  };
+      })};
 
   //restart function includes nested add employee, view employee, or connection.end();
   const reStart = () => {
@@ -54,7 +57,8 @@ const connection = mysql.createConnection({
         if (answer.restart === 'ADD') {
           addEmp();
         } else if (answer.postOrBid === 'VIEW') {
-          viewEmp();
+          console.log('viewing...')
+            viewEmp();
         } else {
           connection.end();
         }
@@ -89,11 +93,10 @@ inquirer
     connection.query(
         'INSERT INTO employees SET ?',
         {
-            id: NULL,
             first_name: answers.empFirst,
             last_name: answers.empLast,
             role_id: answers.roleID,
-            maanger_id: answers.maangerID
+            manager_id: answers.managerID
         },
         (err) => {
             if (err) throw err;
@@ -105,7 +108,17 @@ inquirer
 )
   }
   //function for viewing employees
-
+const viewEmp = () => {
+    //query the database for all employees listed
+    connection.query('SELECT * FROM employees', (err, results) => {
+        if (err) throw err;
+        //once you have the items, display:
+        console.log('\n');
+        console.log('-----------------------------------------ALL CURRENT EMPLOYEES----------------------------------------')
+        console.table(results);
+        reStart();
+    })
+}
 
   //Initialize start function
   connection.connect((err) => {
