@@ -24,8 +24,8 @@ const connection = mysql.createConnection({
       .prompt({
         name: 'viewOrAdd',
         type: 'list',
-        message: 'Would you like to [ADD] an employee or [VIEW] employees?',
-        choices: ['ADD Employee', 'ADD Department', 'VIEW Employee', 'VIEW Departments', 'EXIT'],
+        message: 'What would you like to do?',
+        choices: ['ADD Employee', 'ADD Department', 'VIEW Employee', 'VIEW Departments', 'VIEW All Info', 'EXIT'],
       })
       .then((answer) => {
         // based on their answer, either call the add or the view functions
@@ -42,6 +42,9 @@ const connection = mysql.createConnection({
         case "VIEW Departments": 
             viewDept();
             break
+        case "VIEW All Info":
+            viewAll();
+            break    
         case "EXIT": 
             connecttion.end();    
             break
@@ -159,6 +162,15 @@ const viewDept = () => {
 }
 
 //function for viewing all
+const viewAll = () => {
+connection.query('SELECT employees.first_name, employees.last_name, department.department_name FROM employees, department WHERE employees.role_id=department.id', (req, results) => {
+   
+    console.log('\n');
+    console.log('-----------------------------------------ALL EMPLOYEES AND DEPARTMENTS----------------------------------------')
+    console.table(results);
+    reStart();
+})
+}
 
   //Initialize start function
   connection.connect((err) => {
