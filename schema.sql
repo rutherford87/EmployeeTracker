@@ -7,22 +7,19 @@ USE tracker_DB;
 CREATE TABLE employees(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30) NOT NULL,
+  last_name VARCHAR(30) NOT NULL,
+  role_id INT NOT NULL,
+  manager_id INTEGER
+ );
 
---   fill out to match readme
-  category VARCHAR(45) NOT NULL,
-  starting_bid INT default 0,
-  highest_bid INT default 0,
-  PRIMARY KEY (id)
-);
-
--- CREATE TABLE role, department
+-- Next steap, CREATE two separate TABLE for role and department
 
 -- Seed for employee table
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("vanilla", 2.50, 100);
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+VALUES (NULL, 'Leslie', 'Knope', 23, 1);
 
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("chocolate", 3.10, 120);
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+VALUES (NULL, 'Ron', 'Swanson', 33, 2);
 
 -- INSERT INTO products (flavor, price, quantity)
 -- VALUES ("strawberry", 3.25, 75);

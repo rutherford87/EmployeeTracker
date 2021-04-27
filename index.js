@@ -1,7 +1,7 @@
 //Requirements:
-mysql 
-inquirer
-console.table
+const mysql = require('mysql');
+const inquirer = require('inquirer');
+const cTable = require('console.table');
 //npm start for package
 
 //Connections:
