@@ -12,7 +12,21 @@ CREATE TABLE employees(
   manager_id INTEGER
  );
 
--- Next steap, CREATE two separate TABLE for role and department
+CREATE TABLE department (
+  id INT NOT NULL AUTO_INCREMENT,
+  department_name VARCHAR(30),
+  PRIMARY KEY (id)
+);
+
+
+CREATE TABLE role (
+  id INT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(30),
+  salary DECIMAL(10,2),
+  department_id INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES department(id)
+);
 
 -- Seed for employee table
 INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
@@ -21,5 +35,10 @@ VALUES (NULL, 'Leslie', 'Knope', 23, 1);
 INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES (NULL, 'Ron', 'Swanson', 33, 2);
 
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("strawberry", 3.25, 75);
+INSERT INTO department (id, department_name)
+VALUES (NULL, 'Accounting');
+
+
+INSERT INTO department (id, department_name)
+VALUES (NULL, 'Governing');
+

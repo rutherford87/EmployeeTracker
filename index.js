@@ -25,17 +25,22 @@ const connection = mysql.createConnection({
         name: 'viewOrAdd',
         type: 'list',
         message: 'Would you like to [ADD] an employee or [VIEW] employees?',
-        choices: ['ADD', 'VIEW', 'EXIT'],
+        choices: ['ADD Employee', 'ADD Department', 'VIEW Employee', 'VIEW Departments', 'EXIT'],
       })
       .then((answer) => {
         // based on their answer, either call the add or the view functions
         switch (answer.viewOrAdd){
-         case "ADD":
+         case "ADD Employee":
             addEmp();
             break 
-         case "VIEW": 
-            console.log('viewing...')   
+         case "VIEW Employee": 
             viewEmp();
+            break
+        case "ADD Department":
+            addDept();
+            break 
+        case "VIEW Departments": 
+            viewDept();
             break
         case "EXIT": 
             connecttion.end();    
@@ -49,16 +54,13 @@ const connection = mysql.createConnection({
       .prompt({
         name: 'restart',
         type: 'list',
-        message: 'Would you like to [ADD] another employee, [VIEW] employees, or [EXIT]?',
-        choices: ['ADD', 'VIEW', 'EXIT'],
+        message: 'Would you like to [RESTART] at the beginning or [EXIT]?',
+        choices: ['RESTART', 'EXIT'],
       })
       .then((answer) => {
         // based on their answer, either call the add or the view functions
-        if (answer.restart === 'ADD') {
-          addEmp();
-        } else if (answer.postOrBid === 'VIEW') {
-          console.log('viewing...')
-            viewEmp();
+        if (answer.restart === 'RESTART') {
+          start();
         } else {
           connection.end();
         }
@@ -119,6 +121,44 @@ const viewEmp = () => {
         reStart();
     })
 }
+
+//function for adding department
+const addDept = () => {
+    inquirer
+        .prompt ([
+    {
+        name: 'deptName',
+        type: 'input',
+        message: 'What is the department name?'
+    }])
+    .then((answers) => {
+        connection.query(
+            'INSERT INTO department SET ?',
+            {
+                department_name: answers.deptName,
+            },
+            (err) => {
+                if (err) throw err;
+                console.log('Department was added successfully!');
+            reStart();
+            }
+        )
+    }
+    )
+      }
+
+//function for viewing departments
+const viewDept = () => {
+    connection.query('SELECT * FROM department', (err, results) => {
+        if (err) throw err;
+        console.log('\n');
+        console.log('-----------------------------------------ALL CURRENT DEPARTMENTS----------------------------------------')
+        console.table(results);
+        reStart();
+    })
+}
+
+//function for viewing all
 
   //Initialize start function
   connection.connect((err) => {
